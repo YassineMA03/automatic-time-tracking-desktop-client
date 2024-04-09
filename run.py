@@ -31,7 +31,7 @@ def main():
                 current_date = datetime.now().date()
                 if last_activity_date != current_date:
                     memoire=set()
-                    separator = ["###", current_date.strftime('%Y-%m-%d')]
+                    separator = ["Activity", "Time spent day : " + current_date.strftime('%Y-%m-%d')]
                     last_activity_date = current_date
 
                 temps_usage_combined={}
