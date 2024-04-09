@@ -17,9 +17,9 @@ def main():
     print("________\t__________")
     memoire = set()
     temps_usage_combined = {}
+    cnt=6
     try:
         while True:
-            previous= actual_activity
             activities, actual_activity, actual_time_entry_start_time = resume_activity(activities,
                                                                                         actual_activity,
                                                                                         actual_time_entry_start_time)
@@ -31,6 +31,8 @@ def main():
                 current_date = datetime.now().date()
                 if last_activity_date != current_date:
                     memoire=set()
+                    cnt+=1
+                    cnt%=7
                     separator = ["Activity", "Time spent day : " + current_date.strftime('%Y-%m-%d')]
                     last_activity_date = current_date
 
@@ -47,8 +49,8 @@ def main():
                             else:
                                 temps_usage_combined[title]+=activity.get_time_spent()
 
-                # Pour vider le fichier
-                with open('Totale_sauvegarde.csv', "w", encoding="utf-8", newline='') as resume:
+                # Pour remplir le fichier du jour en question
+                with open('sauvegardeDay'+str(cnt)+'.csv', "w", encoding="utf-8", newline='') as resume:
                     csv_writer = csv.writer(resume)
                     csv_writer.writerow(separator)
                     for key, value in temps_usage_combined.items():
