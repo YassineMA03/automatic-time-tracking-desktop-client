@@ -7,6 +7,7 @@ from models import Activity, TimeEntry
 import pandas as pd
 import math
 import unidecode
+from collections import defaultdict
 def main():
     memoire_initiale = set()
     temps_usage_initial={} 
@@ -20,7 +21,9 @@ def main():
     print("________\t__________")
     memoire = set()
     temps_usage_combined = {}
+    taille_sauvegarde=7
     cnt=6
+    tm=-5
     first_start=True
     try:
         while True:
@@ -40,9 +43,9 @@ def main():
                     actual_time_entry_start_time = datetime.now(pytz.timezone("Europe/Paris"))
                     last_activity_date = None  # Variable to store the date of the last activity
                     if first_start:
-                        cnt=find_index(current_date.strftime('%Y-%m-%d'))[0]
+                        cnt=find_index(current_date.strftime('%Y-%m-%d'),taille_sauvegarde)[0]
                         #print(cnt)
-                        changes_needed=find_index(current_date.strftime('%Y-%m-%d'))[1]
+                        changes_needed=find_index(current_date.strftime('%Y-%m-%d'),taille_sauvegarde)[1]
                         if changes_needed:
                             with open('sauvegardeDay'+str(cnt)+'.csv', 'r', newline='') as file:
                                     # Create a CSV reader object
@@ -63,7 +66,7 @@ def main():
                         first_start=False
                     else:
                         cnt+=1
-                        cnt%=7
+                        cnt%=taille_sauvegarde
                         memoire_initiale=set()
                         temps_usage_initial={}
                         changes_needed=False
@@ -98,14 +101,56 @@ def main():
                     csv_writer.writerow(separator)
                     for key, value in temps_usage_combined.items():
                         csv_writer.writerow([key, value])
+                if tm==0:
+                    dates,all_activities,savingTable=resumeSavingFiles(taille_sauvegarde)
+                    headers=['Dates/Activities']+list(all_activities)
+                    savingData=[]
+                    for day in dates:
+                        line=[day]
+                        for activity in all_activities:
+                            line.append(savingTable[(day,activity)])
+                        savingData.append(line)
+                    with open('totalSauvegarde.csv', "w", encoding="utf-8", newline='') as resume:
+                        # Create a CSV writer object
+                        csvwriter = csv.writer(resume)
+                        
+                        # Write the header
+                        csvwriter.writerow(headers)
+                        
+                        # Write the data rows
+                        csvwriter.writerows(savingData)
 
             time.sleep(1)
-            #print('################################')
+            tm+=1
+            tm%=60
     except KeyboardInterrupt:
         activities, actual_activity, actual_time_entry_start_time = resume_activity(activities,
                                                                                     actual_activity,
                                                                                     actual_time_entry_start_time)
-        
+
+def default_value():
+    return 0
+def resumeSavingFiles(taille_sauvegarde):
+    saving_table=defaultdict(default_value)
+    dates=[]
+    activities=set()
+    for i in range(taille_sauvegarde):
+        try: 
+            with open('sauvegardeDay'+str(i)+'.csv', newline='', encoding='utf-8') as file:
+                csv_reader = csv.reader(file)
+                first_line = next(csv_reader)
+                saving_date=first_line[1].split(' : ')[-1]
+                dates.append(saving_date)
+                # Read and process the remaining lines
+                for row in csv_reader:
+                    # Access the second column (index 1)
+                    activity_title=row[0]
+                    time_spent = parse_duration_string(row[1])
+                    activities.add(activity_title)
+                    saving_table[(saving_date,activity_title)]=time_spent
+        except (IndexError,StopIteration) as e:
+                return sorted(dates),activities,saving_table
+    return sorted(dates),activities,saving_table
 
 def parse_duration_string(duration_str):
     # Split the string into hours, minutes, seconds, and milliseconds
@@ -121,16 +166,14 @@ def parse_duration_string(duration_str):
     duration = timedelta(hours=hours, minutes=minutes, seconds=seconds, milliseconds=milliseconds)
 
     return duration
-def find_index(date):
+def find_index(date,taille_sauvegarde):
     new_date=date.split()[0]
     dates=[]
-    for i in range(7):
+    for i in range(taille_sauvegarde):
         try: 
             with open('sauvegardeDay'+str(i)+'.csv', newline='', encoding='utf-8') as file:
                 csv_reader = csv.reader(file)
-                #print(next(csv_reader))
                 content = next(csv_reader)
-                #print('length of content is: '+str(len(content)))
                 date_content=content[1].split(' : ')
                 saving_date = date_content[-1]
                 dates.append((saving_date,i))
@@ -142,7 +185,7 @@ def find_index(date):
                     if mx_date[0]==date:
                         return (mx_date[1],True) # True means that the page contains already some information
                     else:
-                        return ((mx_date[1]+1)%7,False) # False means that we don't need the content of this page
+                        return ((mx_date[1]+1)%taille_sauvegarde,False) # False means that we don't need the content of this page
     mx_date = sorted(dates, key=lambda x: x[0])[-1]
     if mx_date[0]==new_date:
         return (mx_date[1],True) # True means that the page contains already some information
