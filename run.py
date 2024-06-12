@@ -8,6 +8,7 @@ import pandas as pd
 import math
 import unidecode
 from collections import defaultdict
+import os
 def main():
     memoire_initiale = set()
     temps_usage_initial={} 
@@ -47,7 +48,10 @@ def main():
                         #print(cnt)
                         changes_needed=find_index(current_date.strftime('%Y-%m-%d'),taille_sauvegarde)[1]
                         if changes_needed:
-                            with open('sauvegardeDay'+str(cnt)+'.csv', 'r', newline='') as file:
+                            current_directory = os.path.dirname(os.path.abspath(__file__))
+                            sauvegarde_day="sauvegardeDay"+ str(cnt)+".csv"
+                            file_path = str(current_directory)+f"\{sauvegarde_day}"
+                            with open(file_path, 'r', newline='') as file:
                                     # Create a CSV reader object
                                     csv_reader = csv.reader(file)
                                             
@@ -96,7 +100,10 @@ def main():
                                 temps_usage_combined[new_title]+=activity.get_time_spent()
 
                 # Pour remplir le fichier du jour en question
-                with open('sauvegardeDay'+str(cnt)+'.csv', "w", encoding="utf-8", newline='') as resume:
+                current_directory = os.path.dirname(os.path.abspath(__file__))
+                sauvegarde_day="sauvegardeDay"+ str(cnt)+".csv"
+                file_path = str(current_directory)+f"\{sauvegarde_day}"
+                with open(file_path, "w", encoding="utf-8", newline='') as resume:
                     csv_writer = csv.writer(resume)
                     csv_writer.writerow(separator)
                     for key, value in temps_usage_combined.items():
@@ -110,7 +117,8 @@ def main():
                         for activity in all_activities:
                             line.append(savingTable[(day,activity)])
                         savingData.append(line)
-                    with open('totalSauvegarde.csv', "w", encoding="utf-8", newline='') as resume:
+                    tatalSavePath=str(current_directory)+f"\\totalSauvegarde.csv"
+                    with open(tatalSavePath, "w", encoding="utf-8", newline='') as resume:
                         # Create a CSV writer object
                         csvwriter = csv.writer(resume)
                         
@@ -136,7 +144,10 @@ def resumeSavingFiles(taille_sauvegarde):
     activities=set()
     for i in range(taille_sauvegarde):
         try: 
-            with open('sauvegardeDay'+str(i)+'.csv', newline='', encoding='utf-8') as file:
+            current_directory = os.path.dirname(os.path.abspath(__file__))
+            sauvegarde_day="sauvegardeDay"+ str(i)+".csv"
+            file_path = str(current_directory)+f"\{sauvegarde_day}"
+            with open(file_path, newline='', encoding='utf-8') as file:
                 csv_reader = csv.reader(file)
                 first_line = next(csv_reader)
                 saving_date=first_line[1].split(' : ')[-1]
@@ -171,7 +182,10 @@ def find_index(date,taille_sauvegarde):
     dates=[]
     for i in range(taille_sauvegarde):
         try: 
-            with open('sauvegardeDay'+str(i)+'.csv', newline='', encoding='utf-8') as file:
+            current_directory = os.path.dirname(os.path.abspath(__file__))
+            sauvegarde_day="sauvegardeDay"+ str(i)+".csv"
+            file_path = str(current_directory)+f"\{sauvegarde_day}"
+            with open(file_path, newline='', encoding='utf-8') as file:
                 csv_reader = csv.reader(file)
                 content = next(csv_reader)
                 date_content=content[1].split(' : ')
