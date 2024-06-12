@@ -110,12 +110,15 @@ def main():
                         csv_writer.writerow([key, value])
                 if tm==0:
                     dates,all_activities,savingTable=resumeSavingFiles(taille_sauvegarde)
-                    headers=['Dates/Activities']+list(all_activities)
+                    headers=['Date','Usage']+list(all_activities)
                     savingData=[]
                     for day in dates:
-                        line=[day]
+                        line=[]
+                        somme=0
                         for activity in all_activities:
                             line.append(savingTable[(day,activity)])
+                            somme+=savingTable[(day,activity)]
+                        line=[day,somme]+line
                         savingData.append(line)
                     tatalSavePath=str(current_directory)+f"\\totalSauvegarde.csv"
                     with open(tatalSavePath, "w", encoding="utf-8", newline='') as resume:
@@ -156,7 +159,7 @@ def resumeSavingFiles(taille_sauvegarde):
                 for row in csv_reader:
                     # Access the second column (index 1)
                     activity_title=row[0]
-                    time_spent = parse_duration_string(row[1])
+                    time_spent = math.floor(parse_duration_string(row[1]).total_seconds())
                     activities.add(activity_title)
                     saving_table[(saving_date,activity_title)]=time_spent
         except (IndexError,StopIteration) as e:
