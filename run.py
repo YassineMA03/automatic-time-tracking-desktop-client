@@ -110,7 +110,7 @@ def main():
                         csv_writer.writerow([key, value])
                 if tm==0:
                     dates,all_activities,savingTable=resumeSavingFiles(taille_sauvegarde)
-                    headers=['Date','Usage(en h)']+list(all_activities)
+                    headers=['date','total_daily_usage']+list(all_activities)
                     savingData=[]
                     for day in dates:
                         line=[]
@@ -163,7 +163,7 @@ def resumeSavingFiles(taille_sauvegarde):
                     time_spent = math.floor(parse_duration_string(row[1]).total_seconds())
                     activities.add(activity_title)
                     saving_table[(saving_date,activity_title)]=time_spent
-        except (IndexError,StopIteration) as e:
+        except (IndexError,StopIteration,FileNotFoundError) as e:
                 return sorted(dates),activities,saving_table
     return sorted(dates),activities,saving_table
 
@@ -195,7 +195,7 @@ def find_index(date,taille_sauvegarde):
                 date_content=content[1].split(' : ')
                 saving_date = date_content[-1]
                 dates.append((saving_date,i))
-        except (IndexError,StopIteration) as e:
+        except (IndexError,StopIteration,FileNotFoundError) as e:
                 if len(dates)==0:
                     return (i,False) #false means that the page is empty
                 else:
