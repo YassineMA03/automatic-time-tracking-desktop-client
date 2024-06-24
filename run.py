@@ -110,14 +110,15 @@ def main():
                         csv_writer.writerow([key, value])
                 if tm==0:
                     dates,all_activities,savingTable=resumeSavingFiles(taille_sauvegarde)
-                    headers=['Date','Usage']+list(all_activities)
+                    headers=['Date','Usage(en h)']+list(all_activities)
                     savingData=[]
                     for day in dates:
                         line=[]
                         somme=0
                         for activity in all_activities:
-                            line.append(savingTable[(day,activity)])
+                            line.append(savingTable[(day,activity)]/60)
                             somme+=savingTable[(day,activity)]
+                        somme/=3600
                         line=[day,somme]+line
                         savingData.append(line)
                     tatalSavePath=str(current_directory)+f"\\totalSauvegarde.csv"
