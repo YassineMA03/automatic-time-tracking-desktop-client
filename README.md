@@ -10,10 +10,6 @@
 *** asperduti, repo, arielsperduti, email
 -->
 
-
-
-
-
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
@@ -22,14 +18,13 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
+
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
-
-
 
 <!-- PROJECT LOGO -->
 <br />
@@ -54,9 +49,8 @@
   </p>
 </p>
 
-
-
 <!-- TABLE OF CONTENTS -->
+
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
@@ -71,8 +65,8 @@
 - [License](#license)
 - [Contact](#contact)
 
-
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 <!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
@@ -82,47 +76,47 @@ There will be two more parts, a backend, and a client app for smartphones.
 
 ### Built With
 
-* [Python 3.6]()
-
-
+- [Python 3.6]()
 
 <!-- GETTING STARTED -->
+
 ## Getting Started
 
 To get a local copy up and running follow these simple steps.
 
 ### Installation
- 
+
 1. Clone the repo
+
 ```sh
 git clone https://github.com/asperduti/automatic-time-tracking-desktop-client.git
 ```
 
-
 <!-- USAGE EXAMPLES -->
+
 ## Usage
 
 To start to track the time that you spend at your computer just run the app:
+
 ```sh
 python3 run.py
 ```
 
 And when you finish the program, you will get a resume like this one:
+
 ```sh
 Resume:
 
 Activity        Time Spent
 ________        __________
-time_tracking : bash    0:00:01.026519
-time_tracking : python3 0:00:08.180052
-time_tracking   0:00:11.213815
 ```
 
 The best idea is start the tracker at login time, the steps to achive this depend of the platform.
 
 ### Linux
 
-This is as simple as create a new [Desktop Entry](https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html)(a file with extension .desktop) inside of *~/.config/autostart* with the following conten:
+This is as simple as create a new [Desktop Entry](https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html)(a file with extension .desktop) inside of _~/.config/autostart_ with the following conten:
+
 ```
 [Desktop Entry]
 Name=TimeTracking
@@ -134,15 +128,14 @@ Type=Application
 X-GNOME-Autostart-enabled=true
 ```
 
-
 <!-- ROADMAP -->
+
 ## Roadmap
 
 See the [open issues](https://github.com/asperduti/automatic-time-tracking-desktop-client/issues) for a list of proposed features (and known issues).
 
-
-
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -153,27 +146,23 @@ Contributions are what make the open source community such an amazing place to b
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-
-
 <!-- LICENSE -->
+
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
-
-
 <!-- CONTACT -->
+
 ## Contact
 
 Your Name - [@arielsperduti](https://twitter.com/arielsperduti)
 
 Project Link: [https://github.com/asperduti/automatic-time-tracking-desktop-client](https://github.com/asperduti/automatic-time-tracking-desktop-client)
 
-
-
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [contributors-shield]: https://img.shields.io/github/contributors/asperduti/automatic-time-tracking-desktop-client.svg?style=flat-square
 [contributors-url]: https://github.com/asperduti/automatic-time-tracking-desktop-client/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/asperduti/automatic-time-tracking-desktop-client.svg?style=flat-square
